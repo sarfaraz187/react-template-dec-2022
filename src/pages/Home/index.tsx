@@ -1,8 +1,9 @@
 import { useState } from 'react';
+import './home.css';
 
 function Home() {
   return (
-    <div className="flex bg-white p-6 rounded-lg shadow-lg w-16">
+    <div className="flex min-h-screen flex-col justify-center bg-white p-6 rounded-lg shadow-lg w-16">
       <div className="flex flex-row">
         <div>
           <label className="label">
