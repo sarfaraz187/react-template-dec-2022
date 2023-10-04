@@ -18,7 +18,7 @@ function Home() {
   return (
     <div className="bg-white p-6 rounded-lg shadow-lg">
       <Header></Header>
-      <div className="grid grid-cols-2 gap-x-10 gap-y-4">
+      <div className="grid grid-cols-2 gap-x-7 gap-y-4">
         <div>
           <label className="label">
             <span className="label-text font-mono font-bold	text-base text-black">
@@ -29,16 +29,16 @@ function Home() {
             type="number"
             placeholder=""
             value={parameters.chargingPoints}
-            className="label-text input input-bordered input-lg input-accent w-full max-w-xs bg-white font-mono	text-black"
+            className="label-text input input-bordered input-lg input-bordered w-full max-w-xs bg-white font-mono	text-black"
           />
         </div>
         <div>
           <label className="label">
-            <span className="label-text font-mono font-bold	 text-base text-black">
+            <span className="label-text font-mono font-bold	text-base text-black">
               Arrival Probability
             </span>
           </label>
-          <select className="select select-lg select-success w-full select-lg max-w-xs bg-white font-mono 	text-black">
+          <select className="select select-lg select-bordered w-full select-lg max-w-xs bg-white font-mono text-black">
             {numbersArray.map((probability) => (
               <option selected={probability === 100 ? true : false}>
                 {probability}%
@@ -56,7 +56,7 @@ function Home() {
             type="number"
             placeholder=""
             value={parameters.carEnergy}
-            className="label-text input input-bordered input-lg input-accent w-full max-w-xs bg-white font-mono	text-black"
+            className="label-text input input-bordered input-lg input-bordered w-full max-w-xs bg-white font-mono	text-black"
           />
         </div>
         <div>
@@ -69,13 +69,15 @@ function Home() {
             type="number"
             placeholder=""
             value={parameters.chargingPower}
-            className="label-text input input-bordered input-lg input-accent w-full max-w-xs bg-white font-mono text-black "
+            className="label-text input input-bordered input-lg input-bordered w-full max-w-xs bg-white font-mono text-black "
           />
         </div>
       </div>
-      <button className="btn w-full rounded-full mt-4 btn-primary">
-        Calculate
-      </button>
+      <div className="w-full flex justify-center">
+        <button className="btn w-5/12 rounded-full mt-4 btn-primary">
+          Calculate
+        </button>
+      </div>
 
       <Results />
     </div>
