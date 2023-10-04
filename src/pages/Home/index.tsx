@@ -1,32 +1,83 @@
 import { useState } from 'react';
 import './home.css';
+import Results from './results';
+import Header from '../../components/Header';
 
 function Home() {
+  let [parameters, setParameters] = useState({
+    chargingPoints: 20,
+    arrivalProbability: '100%',
+    carEnergy: 18,
+    chargingPower: 11,
+  });
+  const numbersArray = Array.from(
+    { length: 19 },
+    (_, index) => (index + 2) * 10
+  );
+
   return (
-    <div className="flex min-h-screen flex-col justify-center bg-white p-6 rounded-lg shadow-lg w-16">
-      <div className="flex flex-row">
+    <div className="bg-white p-6 rounded-lg shadow-lg">
+      <Header></Header>
+      <div className="grid grid-cols-2 gap-x-10 gap-y-4">
         <div>
           <label className="label">
-            <span className="label-text">What is your name?</span>
+            <span className="label-text font-mono font-bold	text-base text-black">
+              Charging Points
+            </span>
           </label>
           <input
-            type="text"
-            placeholder="Type here"
-            className="label-text input input-bordered input-lg input-accent w-full max-w-xs bg-white"
+            type="number"
+            placeholder=""
+            value={parameters.chargingPoints}
+            className="label-text input input-bordered input-lg input-accent w-full max-w-xs bg-white font-mono	text-black"
           />
         </div>
         <div>
           <label className="label">
-            <span className="label-text">What is your name?</span>
+            <span className="label-text font-mono font-bold	 text-base text-black">
+              Arrival Probability
+            </span>
+          </label>
+          <select className="select select-lg select-success w-full select-lg max-w-xs bg-white font-mono 	text-black">
+            {numbersArray.map((probability) => (
+              <option selected={probability === 100 ? true : false}>
+                {probability}%
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="label">
+            <span className="label-text font-mono font-bold text-base	text-black">
+              Car Energy (Kwh)
+            </span>
           </label>
           <input
-            type="text"
-            placeholder="Type here"
-            className="label-text input input-bordered input-lg input-accent w-full max-w-xs bg-white"
+            type="number"
+            placeholder=""
+            value={parameters.carEnergy}
+            className="label-text input input-bordered input-lg input-accent w-full max-w-xs bg-white font-mono	text-black"
+          />
+        </div>
+        <div>
+          <label className="label">
+            <span className="label-text font-mono font-bold	text-black text-base">
+              Charging power (KW)
+            </span>
+          </label>
+          <input
+            type="number"
+            placeholder=""
+            value={parameters.chargingPower}
+            className="label-text input input-bordered input-lg input-accent w-full max-w-xs bg-white font-mono text-black "
           />
         </div>
       </div>
-      <button className="btn w-64 rounded-full">Button</button>
+      <button className="btn w-full rounded-full mt-4 btn-primary">
+        Calculate
+      </button>
+
+      <Results />
     </div>
   );
 }
