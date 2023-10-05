@@ -1,22 +1,17 @@
 import { chargingDemandProbabilities, arrivalProbabilities } from '../CONSTANTS';
-
-interface Parameters {
-  chargingPoints: number;
-  powerPerChargePointKW: number;
-  carEnergy: number;
-}
+import { Parameters } from '../Types';
 
 const getChargingPointDemand = async () => {
   // EV arrives, simulate charging demand.
   const evChargingDemand = 0.007 + Math.random() * (0.1 - 0.007);
-  let closestDemandProbability = closestRange(chargingDemandProbabilities, evChargingDemand);
+  let closestDemandProbability: any = closestRange(chargingDemandProbabilities, evChargingDemand);
   console.log(closestDemandProbability);
   return closestDemandProbability?.range;
 };
 
 export const energyCalculation = async (payload: Parameters) => {
-  const totalTicks = (365 * 24 * 60) / 15; // 1 year in 15-minute intervals
-  console.log('=============== Start ===============');
+  // 1 year in 15-minute intervals
+  const totalTicks = (365 * 24 * 60) / 15;
   let totalEnergyConsumedKWh = 0,
     theoreticalMaxPowerDemandKW = payload?.chargingPoints * payload?.powerPerChargePointKW,
     actualMaxPowerDemandKW = 0,
@@ -50,10 +45,10 @@ export const energyCalculation = async (payload: Parameters) => {
   const concurrencyFactor = actualMaxPowerDemandKW / theoreticalMaxPowerDemandKW;
 
   return {
-    totalEnergyConsumedKWh,
-    theoreticalMaxPowerDemandKW,
-    actualMaxPowerDemandKW,
-    concurrencyFactor,
+    totalEnergyConsumedKWh: Math.round(totalEnergyConsumedKWh),
+    theoreticalMaxPowerDemandKW: Math.round(theoreticalMaxPowerDemandKW),
+    actualMaxPowerDemandKW: Math.round(actualMaxPowerDemandKW),
+    concurrencyFactor: Math.round(concurrencyFactor),
   };
 };
 
@@ -65,7 +60,6 @@ function closestRange(arr: any, target: number) {
     const currentNumber = arr[i]?.probability,
       currentDifference = Math.abs(currentNumber - target),
       closestDifference = Math.abs(closest - target);
-    // console.log(currentDifference < closestDifference, currentDifference, closestDifference);
     if (currentDifference < closestDifference) {
       closest = currentNumber;
       rangeObj = arr[i];
