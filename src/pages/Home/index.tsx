@@ -13,6 +13,7 @@ function Home() {
   const numbersArray = Array.from({ length: 19 }, (_, index) => (index + 2) * 10);
 
   const onCalculateClick = async () => {
+    console.clear();
     let results = await energyCalculation(parameters);
     console.log(results);
   };

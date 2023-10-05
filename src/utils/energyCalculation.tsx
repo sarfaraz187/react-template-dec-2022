@@ -6,11 +6,17 @@ interface Parameters {
   carEnergy: number;
 }
 
+const getChargingPointDemand = async () => {
+  // EV arrives, simulate charging demand.
+  const evChargingDemand = 0.007 + Math.random() * (0.1 - 0.007);
+  let closestDemandProbability = closestRange(chargingDemandProbabilities, evChargingDemand);
+  console.log(closestDemandProbability);
+  return closestDemandProbability?.range;
+};
+
 export const energyCalculation = async (payload: Parameters) => {
-  // const numChargePoints = 20;
-  // const powerPerChargePointKW = 11;
-  const totalTicks = 2; // (365 * 24 * 60) / 15; // 1 year in 15-minute intervals
-  console.log('========== Start ===========');
+  const totalTicks = (365 * 24 * 60) / 15; // 1 year in 15-minute intervals
+  console.log('=============== Start ===============');
   let totalEnergyConsumedKWh = 0,
     theoreticalMaxPowerDemandKW = payload?.chargingPoints * payload?.powerPerChargePointKW,
     actualMaxPowerDemandKW = 0,
@@ -18,26 +24,18 @@ export const energyCalculation = async (payload: Parameters) => {
 
   // Simulate EV arrivals and charging needs
   for (let tick = 0; tick < totalTicks; tick++) {
-    // Simulate EV arrival
+    // Probability of a car arriving.
     const arrivalProb = Math.random();
-    console.log(arrivalProb, arrivalProbabilities[tick % arrivalProbabilities.length]);
+
+    // Checking for every 15 min interval
     if (arrivalProb <= arrivalProbabilities[tick % arrivalProbabilities.length]) {
-      // EV arrives, simulate charging demand
-      const chargingDemandProb = Math.random();
-      let chargingDemandKm = 0;
-
-      for (const demand of chargingDemandProbabilities) {
-        if (chargingDemandProb <= demand.probability) {
-          chargingDemandKm = demand.range;
-          break;
-        }
-      }
-
-      // Calculate energy consumed
+      let chargingDemandKm = await getChargingPointDemand();
+      console.log('Charging Demand Km :', chargingDemandKm);
+      // Calculate energy consumed.
       const energyConsumedKWh = (chargingDemandKm * payload.carEnergy) / 100; // 18kWh per 100km
       totalEnergyConsumedKWh += energyConsumedKWh;
 
-      // Update power demand
+      // Update power demand.
       const powerDemandKW = energyConsumedKWh * 4; // 4 times an hour
       for (let i = 0; i < 4; i++) {
         if (tick + i < totalTicks) {
@@ -48,7 +46,7 @@ export const energyCalculation = async (payload: Parameters) => {
     }
   }
 
-  // Calculate concurrency factor
+  // Calculate concurrency factor.
   const concurrencyFactor = actualMaxPowerDemandKW / theoreticalMaxPowerDemandKW;
 
   return {
@@ -58,3 +56,20 @@ export const energyCalculation = async (payload: Parameters) => {
     concurrencyFactor,
   };
 };
+
+function closestRange(arr: any, target: number) {
+  if (arr.length === 0) return {};
+  let closest = arr[0]?.probability;
+  let rangeObj = {};
+  for (let i = 1; i < arr.length; i++) {
+    const currentNumber = arr[i]?.probability,
+      currentDifference = Math.abs(currentNumber - target),
+      closestDifference = Math.abs(closest - target);
+    // console.log(currentDifference < closestDifference, currentDifference, closestDifference);
+    if (currentDifference < closestDifference) {
+      closest = currentNumber;
+      rangeObj = arr[i];
+    }
+  }
+  return rangeObj;
+}
