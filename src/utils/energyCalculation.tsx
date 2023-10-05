@@ -5,7 +5,7 @@ const getChargingPointDemand = async () => {
   // EV arrives, simulate charging demand.
   const evChargingDemand = 0.007 + Math.random() * (0.1 - 0.007);
   let closestDemandProbability: any = closestRange(chargingDemandProbabilities, evChargingDemand);
-  console.log(closestDemandProbability);
+  // console.log(closestDemandProbability);
   return closestDemandProbability?.range;
 };
 
@@ -25,7 +25,7 @@ export const energyCalculation = async (payload: Parameters) => {
     // Checking for every 15 min interval
     if (arrivalProb <= arrivalProbabilities[tick % arrivalProbabilities.length]) {
       let chargingDemandKm = await getChargingPointDemand();
-      console.log('Charging Demand Km :', chargingDemandKm);
+      // console.log('Charging Demand Km :', chargingDemandKm);
       // Calculate energy consumed.
       const energyConsumedKWh = (chargingDemandKm * payload.carEnergy) / 100; // 18kWh per 100km
       totalEnergyConsumedKWh += energyConsumedKWh;

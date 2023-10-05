@@ -5,17 +5,17 @@ import { energyCalculation } from '../../utils/energyCalculation';
 
 function Home() {
   const defaultParameters = {
-    chargingPoints: 20,
-    arrivalProbability: '100%',
-    carEnergy: 18,
-    powerPerChargePointKW: 11,
-  };
-  const resultsParameters = {
-    totalEnergyConsumedKWh: 0,
-    theoreticalMaxPowerDemandKW: 0,
-    actualMaxPowerDemandKW: 0,
-    concurrencyFactor: 0,
-  };
+      chargingPoints: 20,
+      arrivalProbability: '100%',
+      carEnergy: 18,
+      powerPerChargePointKW: 11,
+    },
+    resultsParameters = {
+      totalEnergyConsumedKWh: 0,
+      theoreticalMaxPowerDemandKW: 0,
+      actualMaxPowerDemandKW: 0,
+      concurrencyFactor: 0,
+    };
 
   let [parameters, setParameters] = useState(defaultParameters),
     [calculatedParams, setCalculatedParams] = useState(resultsParameters);
@@ -29,9 +29,11 @@ function Home() {
     };
 
   const onParametersChange = (value: number | string, fromEvent: string) => {
-    console.log(fromEvent, value);
+    console.log({ fromEvent, value });
     setParameters((prevState) => ({ ...prevState, [fromEvent]: value }));
   };
+
+  console.log('Charging Points :', parameters);
   return (
     <div className="bg-white p-6 rounded-lg shadow-lg">
       <Header></Header>
@@ -52,9 +54,14 @@ function Home() {
           <label className="label">
             <span className="label-text font-mono font-bold	text-base text-black">Arrival Probability</span>
           </label>
-          <select className="select select-lg select-bordered w-full select-lg max-w-xs bg-white font-mono text-black" onChange={(event) => onParametersChange(event.target.value, 'carEnergy')}>
-            {numbersArray.map((probability) => (
-              <option selected={probability === 100 ? true : false}>{probability}%</option>
+          <select
+            className="select select-lg select-bordered w-full select-lg max-w-xs bg-white font-mono text-black"
+            onChange={(event) => onParametersChange(event.target.value, 'arrivalProbability')}
+          >
+            {numbersArray.map((probability, index) => (
+              <option key={'probability_' + index} selected={`${probability}%` === parameters.arrivalProbability ? true : false}>
+                {probability}%
+              </option>
             ))}
           </select>
         </div>
@@ -67,7 +74,7 @@ function Home() {
             placeholder=""
             value={parameters.carEnergy}
             className="label-text input input-bordered input-lg input-bordered w-full max-w-xs bg-white font-mono	text-black"
-            onChange={(event) => onParametersChange(event.target.value, 'arrivalProbability')}
+            onChange={(event) => onParametersChange(event.target.value, 'carEnergy')}
           />
         </div>
         <div>

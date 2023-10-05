@@ -6,7 +6,7 @@ const Results = (props: CalculatedConsumption) => {
     <>
       <div className="mt-5 flex justify-between grid grid-cols-2 gap-3">
         {Object.keys(props).map((parameter, index) => (
-          <div className="card bg-base-100 shadow-xl w-full bg-white ">
+          <div key={index} className="card bg-base-100 shadow-xl w-full bg-white ">
             <div className="card-body bg-lime-300 rounded-lg p-4">
               <div className="text-black">
                 <b>{headings[index]}</b>
